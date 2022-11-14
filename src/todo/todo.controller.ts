@@ -8,6 +8,7 @@ import {
   Put,
   Res,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import {
@@ -40,6 +41,9 @@ export class TodoController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   async index(@Res() res: Response) {
     const data = await this.service.findAll();
+    if (!data) {
+      throw new NotFoundException('No Tasks found.');
+    }
     res.status(HttpStatus.OK).json(data);
   }
 
@@ -49,6 +53,9 @@ export class TodoController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   async find(@Res() res: Response, @Param('id') id: string) {
     const data = await this.service.findOne(id);
+    if (!data) {
+      throw new NotFoundException('No Task found.');
+    }
     res.status(HttpStatus.OK).json(data);
   }
 
