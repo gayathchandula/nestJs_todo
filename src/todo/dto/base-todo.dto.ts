@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class BaseTodoDto {
@@ -12,5 +12,5 @@ export class BaseTodoDto {
     type: String,
     description: 'description is an optional property',
   })
-  description?: string;
+  description: string;
 }

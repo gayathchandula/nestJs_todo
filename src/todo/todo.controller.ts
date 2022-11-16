@@ -1,23 +1,6 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Res,
-  HttpStatus,
-  NotFoundException,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Res, HttpStatus, NotFoundException, HttpCode } from '@nestjs/common';
 import { Response } from 'express';
-import {
-  ApiCreatedResponse,
-  ApiForbiddenResponse,
-  ApiOkResponse,
-  ApiTags,
-  ApiUnprocessableEntityResponse,
-} from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiTags, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
@@ -28,56 +11,57 @@ export class TodoController {
   constructor(private readonly service: TodoService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({ description: 'Created Succesfully' })
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  async create(@Res() res: Response, @Body() createTodoDto: CreateTodoDto) {
-    await this.service.create(createTodoDto);
-    res.status(HttpStatus.CREATED).send(`Task is created`);
+  async create(@Body() createTodoDto: CreateTodoDto) {
+    const data = await this.service.create(createTodoDto);
+    return data;
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: 'The data were returned successfully' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  async index(@Res() res: Response) {
+  async index() {
     const data = await this.service.findAll();
     if (!data) {
-      throw new NotFoundException('No Tasks found.');
+      throw new NotFoundException('No Task found.');
     }
-    res.status(HttpStatus.OK).json(data);
+    return data;
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: 'The data were returned successfully' })
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  async find(@Res() res: Response, @Param('id') id: string) {
+  async find(@Param('id') id: string) {
     const data = await this.service.findOne(id);
     if (!data) {
       throw new NotFoundException('No Task found.');
     }
-    res.status(HttpStatus.OK).json(data);
+    return data;
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({ description: 'Updated Succesfully' })
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  async update(
-    @Res() res: Response,
-    @Param('id') id: string,
-    @Body() updateTodoDto: UpdateTodoDto,
-  ) {
+  async update( @Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
     const data = await this.service.update(id, updateTodoDto);
-    res.status(HttpStatus.OK).json(data);
+    return data;
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: 'The data were successfully deleted' })
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  async delete(@Res() res: Response, @Param('id') id: string) {
+  async delete(@Param('id') id: string) {
     await this.service.delete(id);
-    res.status(HttpStatus.OK).json(`Task ${id} is deleted`);
+    return `Task ${id} is deleted`;
   }
 }
