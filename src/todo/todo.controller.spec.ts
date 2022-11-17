@@ -3,7 +3,7 @@ import { TodoController } from './todo.controller';
 import { TodoService } from './todo.service';
 import { Response } from 'express';
 import { CreateTodoDto } from './dto/create-todo.dto';
-import { HttpCode } from '@nestjs/common';
+import { HttpCode, NotFoundException } from '@nestjs/common';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoDocument } from './schemas/todo.schema';
 import { Model } from 'mongoose';
@@ -68,9 +68,11 @@ describe('TodoController', () => {
       ]);
     });
 
-    // it("should return 400 error", async () => {
-    //   return expect(todoController.index()).resolves.toEqual(400);
-    // });
+    it('should throw No Tasks found.', async () => {
+      const mockError = new NotFoundException('No Task found.');
+      todoService.findAll = jest.fn().mockImplementation();
+      await expect(todoController.index()).rejects.toThrowError(mockError);
+    });
   });
   describe('getById', () => {
     it('should get a single task', () => {
@@ -79,6 +81,14 @@ describe('TodoController', () => {
         description: testDescription1,
         _id: '1',
       });
+    });
+
+    it('should throw No Task found.', async () => {
+      const mockError = new NotFoundException('No Task found.');
+      todoService.findOne = jest.fn().mockImplementation((id: string) =>
+        Promise.resolve(),
+      );
+      await expect(todoController.find('2')).rejects.toThrowError(mockError);
     });
   });
   describe('newTask', () => {
