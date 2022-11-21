@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TodoModule } from './todo/todo.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductModule } from './product/product.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { ProductModule } from './product/product.module';
       'mongodb+srv://gayath:Gayya@cluster0.cxze7.mongodb.net/?retryWrites=true&w=majority',
     ),
     ProductModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
