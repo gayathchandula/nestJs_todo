@@ -1,3 +1,7 @@
 runtime: nodejs14
 
 service: default
+
+skip_files:
+  - node_modules/
+  - src/
