@@ -61,7 +61,7 @@ export class TodoController {
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   async delete(@Param('id') id: string) {
-    await this.service.delete(id);
-    return `Task ${id} is deleted`;
+    const data = await this.service.delete(id);
+    return data;
   }
 }
