@@ -7,9 +7,7 @@ import { Todo, TodoDocument } from './schemas/todo.schema';
 
 @Injectable()
 export class TodoService {
-  constructor(
-    @InjectModel(Todo.name) private readonly model: Model<TodoDocument>,
-  ) {}
+  constructor(@InjectModel(Todo.name) private readonly model: Model<TodoDocument>) {}
 
   async create(createTodoDto: CreateTodoDto): Promise<Todo> {
     return await new this.model({
@@ -27,10 +25,10 @@ export class TodoService {
   }
 
   async update(id: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {
-    return await this.model.findByIdAndUpdate(id, updateTodoDto).exec();
+    return await this.model.findOneAndUpdate({ _id: id }, updateTodoDto).exec();
   }
 
   async delete(id: string): Promise<Todo> {
-    return await this.model.findByIdAndDelete(id).exec();
+    return await this.model.findOneAndDelete({ _id: id }).exec();
   }
 }

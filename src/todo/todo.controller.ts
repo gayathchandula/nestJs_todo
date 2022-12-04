@@ -50,7 +50,7 @@ export class TodoController {
   @ApiCreatedResponse({ description: 'Updated Succesfully' })
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  async update( @Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
+  async update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
     const data = await this.service.update(id, updateTodoDto);
     return data;
   }

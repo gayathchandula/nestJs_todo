@@ -70,7 +70,7 @@ describe('TodoController', () => {
 
     it('should throw No Tasks found.', async () => {
       const mockError = new NotFoundException('No Task found.');
-      todoService.findAll = jest.fn().mockImplementation();
+      todoService.findAll = jest.fn().mockImplementation([]);
       await expect(todoController.index()).rejects.toThrowError(mockError);
     });
   });
