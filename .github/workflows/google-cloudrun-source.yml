@@ -52,7 +52,7 @@ on:
 
 env:
   PROJECT_ID: nest-test-deploy-370404
-  SERVICE: default
+  SERVICE: nestjs-test-run
   REGION: asia-southeast1
 
 jobs:
